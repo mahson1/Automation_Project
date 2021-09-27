@@ -21,4 +21,14 @@ DATE=`date +%Y%m%d%H%M%S`
 
 #compress the nohup.out file to a special directory
 gzip -c /var/log/apache2/access.log  > /tmp/apache_${DATE}.log.gz
+#size='ls -lrth `/tmp/apache_${DATE}.log.gz | awk '//{print $5; }''
+size=`ls -lth apache_* | awk '//{print $5}'`
 aws s3 mv /var/log/apache2/apache_*.gz s3://upgrad-mahendra-sonawale
+
+FILE=/var/www/html/inventory.html
+if test -f "$FILE"; then
+    echo "$FILE exists."
+else
+        echo "Log Type               Date Created               Type      Size" > /var/www/html/inventory.html
+fi
+echo "httpd-logs               ${DATE}               tar.gz      ${size}" >> /var/www/html/inventory.html
