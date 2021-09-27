@@ -32,3 +32,10 @@ else
         echo "Log Type               Date Created               Type      Size" > /var/www/html/inventory.html
 fi
 echo "httpd-logs               ${DATE}               tar.gz      ${size}" >> /var/www/html/inventory.html
+
+cron_file=/etc/cron.d/automation
+if test -f "$cron_file"; then
+    echo "cron exists."
+else
+        echo "* 23 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+fi
